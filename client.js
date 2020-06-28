@@ -2,6 +2,7 @@ var WebSocketClient = require('websocket').client;
 const readline = require('readline')
 var connSta = require('./connectstate').connState;
 var connStaObj = require('./connectstate').connStateObj;
+var sProrocol = require('./serverProtocol');
 
 connStaObj = new connSta(null, 0);
 
@@ -33,27 +34,48 @@ const rl = readline.createInterface({
     output: process.stdout
 })
 
-var rlClosed = false;
+// var rlClosed = false;
 
 
 // 监听键入回车事件
 rl.on('line', (str) => {
     var arr = parseCmd(str);
-    console.log('split cmd:' + arr);
-
-    // str即为输入的内容
-    if (str === 'close') {
-        // 关闭逐行读取流 会触发关闭事件
-        rl.close()
-        rlClosed = true;
+    if (arr.length == 0) {
+        return;
     }
 
+    var err = null;
+    switch (arr[0]) {
+        case 'close':
+            rl.close()
+            break;
+        case 'add':
+            if (arr.length != 2) {
+                console.log('usage: add [filepath]');
+            } else {
+                err = sProrocol.add(arr[1]);
+            }
+            break;
+        case 'get':
+            if (arr.length != 3) {
+                console.log('usage: get [cid] [localpath]');
+            } else {
+                err = sProrocol.get(arr[1], arr[2]);
+            }
+            break;
+        default:
+            console.log('invalid command!');
+            break;
+    }
+
+    if (err != null) {
+        console.log('cmd fail. err:' + err);
+    }
 })
 
 // 监听关闭事件
 rl.on('close', () => {
     console.log('received close order');
-    rlClosed = true;
 
     if (connStaObj.connection !==  undefined && connStaObj.connection != null && connStaObj.connection.connected) {
         connStaObj.connection.close();
