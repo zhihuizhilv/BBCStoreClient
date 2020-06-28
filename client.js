@@ -3,6 +3,8 @@ const readline = require('readline')
 var connSta = require('./connectstate').connState;
 var connStaObj = require('./connectstate').connStateObj;
 
+connStaObj = new connSta(null, 0);
+
 //////////////////readline////////////////////////
 
 const rl = readline.createInterface({
@@ -26,8 +28,12 @@ rl.on('line', (str) => {
 
 // 监听关闭事件
 rl.on('close', () => {
-    console.log('触发了关闭事件');
+    console.log('received close order');
     rlClosed = true;
+
+    if (connStaObj.connection !==  undefined && connStaObj.connection != null && connStaObj.connection.connected) {
+        connStaObj.connection.close();
+    }
 })
 
 
@@ -35,21 +41,21 @@ rl.on('close', () => {
 
 var client = new WebSocketClient();
 
-function sendNumber() {
-    console.log('rlClosed:' + rlClosed);
-    if (connStaObj.connection.connected) {
-        if (rlClosed) {
-            connStaObj.connection.close();
-            console.log('websocket client closed');    
-        } else {
-            var number = Math.round(Math.random() * 0xFFFFFF);
-            connStaObj.connection.sendUTF(number.toString());
-            console.log('before setTimeout');
-            setTimeout(sendNumber, 1000);
-            console.log('after setTimeout');                
-        }
-    }
-}
+// function sendNumber() {
+//     console.log('rlClosed:' + rlClosed);
+//     if (connStaObj.connection.connected) {
+//         if (rlClosed) {
+//             connStaObj.connection.close();
+//             console.log('websocket client closed');    
+//         } else {
+//             var number = Math.round(Math.random() * 0xFFFFFF);
+//             connStaObj.connection.sendUTF(number.toString());
+//             console.log('before setTimeout');
+//             setTimeout(sendNumber, 1000);
+//             console.log('after setTimeout');                
+//         }
+//     }
+// }
 
  
 client.on('connectFailed', function(error) {
@@ -59,7 +65,7 @@ client.on('connectFailed', function(error) {
 client.on('connect', function(connection) {
     console.log('WebSocket Client Connected');
 
-    connStaObj = new connSta(connection, 0);
+    connStaObj.set(connection, 0);
 
     connection.on('error', function(error) {
         console.log("Connection Error: " + error.toString());
@@ -76,19 +82,6 @@ client.on('connect', function(connection) {
             // console.log("Received: '" + message.utf8Data + "'");
         }
     });
-    
-    // function waitCmd() {
-    //     return true;
-    // }
-
-    // while (true) {
-    //     if (!waitCmd()) {
-    //         console.log('break waitting command loop');
-    //         break;
-    //     }
-    // }
-
-    sendNumber();
 });
  
 // client.connect('ws://localhost:8080/', 'bbcstore-protocol', 'https://mysite.com');
