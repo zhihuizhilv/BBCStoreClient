@@ -7,6 +7,27 @@ connStaObj = new connSta(null, 0);
 
 //////////////////readline////////////////////////
 
+function parseCmd(cmdStr) {
+    var ret = [];
+    if (cmdStr === undefined || cmdStr === null) {
+        return ret;
+    }
+
+    var arr = cmdStr.toString().split(' ');
+    if (arr.length == 0) {
+        return arr;
+    }
+
+    arr.forEach(v => {
+        v = v.trim();
+        if (v != '') {
+            ret.push(v);
+        }
+    });
+
+    return ret;
+}
+
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -17,13 +38,16 @@ var rlClosed = false;
 
 // 监听键入回车事件
 rl.on('line', (str) => {
+    var arr = parseCmd(str);
+    console.log('split cmd:' + arr);
+
     // str即为输入的内容
     if (str === 'close') {
         // 关闭逐行读取流 会触发关闭事件
         rl.close()
         rlClosed = true;
     }
-    console.log(str);
+
 })
 
 // 监听关闭事件
