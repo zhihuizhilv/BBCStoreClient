@@ -3,6 +3,7 @@ const readline = require('readline')
 var connSta = require('./connectstate').connState;
 var connStaObj = require('./connectstate').connStateObj;
 var sProrocol = require('./serverProtocol');
+var ipfsConn = require('./ipfsConnection');
 
 connStaObj = new connSta(null, 0);
 
@@ -130,7 +131,12 @@ client.on('connect', function(connection) {
     });
 });
  
-// client.connect('ws://localhost:8080/', 'bbcstore-protocol', 'https://mysite.com');
-client.connect('ws://localhost:8080/', '', 'https://mysite.com');
+function main() {
+    ipfsConn.init();
+    // client.connect('ws://localhost:8080/', 'bbcstore-protocol', 'https://mysite.com');
+    client.connect('ws://localhost:18080/', '', 'https://mysite.com');
+    // sendNumber();
+}
 
-// sendNumber();
+
+main();
