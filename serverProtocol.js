@@ -4,6 +4,7 @@ var ws = require('./wsConnect');
 function add(cid, size) {
     var msg = {};
     msg.name = 'add';
+    msg.storeSvr = 'node1';
     msg.cid = cid;
     msg.size = size;
 
