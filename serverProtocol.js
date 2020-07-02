@@ -11,8 +11,13 @@ function add(cid, size) {
     return ws.sendMsg(msg);
 }
 
-function get(cid, filepath) {
+function get(sectorid) {
+    var msg = {};
+    msg.name = 'get';
+    msg.storeSvr = 'node1';
+    msg.sectorid = sectorid;
 
+    return ws.sendMsg(msg);
 }
 
 

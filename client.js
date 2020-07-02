@@ -1,6 +1,7 @@
 const readline = require('readline')
 var ws = require('./wsConnect');
 var command = require('./command');
+// var ipfs = require('./ipfsConnection');
 
 
 //////////////////readline////////////////////////
@@ -60,6 +61,7 @@ rl.on('close', () => {
 
  
 function main() {
+    // ipfs.get('Qmc8dhQ511YwbFgJuYY66rwSb5mDtR4tMSvVAmapSp2C9u',  '/home/lzh/ipfstestfile/w/1.txt');
     ws.doConnect();
 }
 

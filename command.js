@@ -34,8 +34,13 @@ async function doAdd(filepath) {
     console.log(fileinfo.cid.toString());
 
     err = sProrocol.add(fileinfo.cid.toString(), fileinfo.size);
+}
 
-
+async function doGet(sectorid, filepath) {
+    let ret = sProrocol.get(sectorid);
+    if (ret.code == 0) {
+        ipfs.get(ret.cid, filepath);
+    }
 }
 
 function onInput(params) {
@@ -51,7 +56,7 @@ function onInput(params) {
             if (params.length != 3) {
                 printCmdHelp(params[0]);
             } else {
-                err = sProrocol.get(params[1], params[2]);
+                err =doGet(params[1], params[2]);
             }
             break;
         default:
