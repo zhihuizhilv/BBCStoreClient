@@ -38,9 +38,9 @@ async function doAdd(filepath) {
 
 async function doGet(sectorid, filepath) {
     let ret = sProrocol.get(sectorid);
-    if (ret.code == 0) {
-        ipfs.get(ret.cid, filepath);
-    }
+    // if (ret.code == 0) {
+    //     ipfs.get(ret.cid, filepath);
+    // }
 }
 
 function onInput(params) {
