@@ -33,6 +33,19 @@ client.on('connect', function(connection) {
 
             var msg = JSON.parse(message.utf8Data);
             switch (msg.name) {
+                case 'addresp':
+                    if (msg.code == 0) {
+                        let sectorid = msg.sectorid;
+                        if (sectorid === undefined || sectorid == null || sectorid == 0) {
+                            console.log('getresp message invalid sectorid');
+                            return;
+                        }
+
+                        console.log('storage data to ipfs successful. sectorid:' + sectorid);
+                    } else {
+                        console.log('storage data to ipfs failed. error:', msg.descrip);
+                    }
+                    break;
                 case 'getresp':
                     let cid = msg.cid;
                     if (cid === undefined || cid == null || cid == '') {
@@ -42,6 +55,9 @@ client.on('connect', function(connection) {
 
                     console.log('should get file from ipfs. savepath:' + savepath);
                     ipfs.get(msg.cid, savepath);
+                    break;
+                case 'wait':
+                    console.log(msg.descrip);
                     break;
             }
         }
