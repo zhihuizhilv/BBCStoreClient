@@ -29,6 +29,8 @@ async function add(filepath) {
 }
 
 async function get(cid, filepath) {
+    console.log('ipfs get, cid:' + cid + ', filepath:' + filepath);
+
     if (help.isExist(filepath)) {
         if (help.isDir(filepath)) {
             console.log('error: path is directory. path:' + filepath)

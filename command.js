@@ -1,5 +1,6 @@
 var ipfs = require('./ipfsConnection');
 var sProrocol = require('./serverProtocol');
+var wsConn = require('./wsConnect');
 
 // function isRightParamCount(params) {
 //     switch (cmd) {
@@ -37,10 +38,9 @@ async function doAdd(filepath) {
 }
 
 async function doGet(sectorid, filepath) {
+    wsConn.setSavePath(filepath);
+    console.log('ipfs get ' + sectorid + ', ' + filepath);
     let ret = sProrocol.get(sectorid);
-    // if (ret.code == 0) {
-    //     ipfs.get(ret.cid, filepath);
-    // }
 }
 
 function onInput(params) {

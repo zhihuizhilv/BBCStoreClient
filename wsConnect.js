@@ -1,40 +1,9 @@
-
+var ipfs = require('./ipfsConnection');
 var WebSocketClient = require('websocket').client;
 var client = new WebSocketClient();
 var conn = null;
 var msgId = 0;
-
-// class connState {
-//     constructor(conn, msgId) {
-//         this.connection = conn;
-//         this.msgId = msgId;
-//     }
-
-//     set(conn, msgId) {
-//         this.connection = conn;
-//         this.msgId = msgId;
-//     }
-// }
-
-// var connStateObj;
-
-
-// function sendNumber() {
-//     console.log('rlClosed:' + rlClosed);
-//     if (connStaObj.connection.connected) {
-//         if (rlClosed) {
-//             connStaObj.connection.close();
-//             console.log('websocket client closed');    
-//         } else {
-//             var number = Math.round(Math.random() * 0xFFFFFF);
-//             connStaObj.connection.sendUTF(number.toString());
-//             console.log('before setTimeout');
-//             setTimeout(sendNumber, 1000);
-//             console.log('after setTimeout');                
-//         }
-//     }
-// }
-
+var savepath = '';
  
 client.on('connectFailed', function(error) {
     console.log('Connect Error: ' + error.toString());
@@ -45,6 +14,7 @@ client.on('connect', function(connection) {
 
     conn = connection;
     msgId = 0;
+    doLogin();
 
     connection.on('error', function(error) {
         console.log("Connection Error: " + error.toString());
@@ -58,7 +28,22 @@ client.on('connect', function(connection) {
 
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
-            // console.log("Received: '" + message.utf8Data + "'");
+            console.log('Received: ');
+            console.log(message.utf8Data);
+
+            var msg = JSON.parse(message.utf8Data);
+            switch (msg.name) {
+                case 'getresp':
+                    let cid = msg.cid;
+                    if (cid === undefined || cid == null || cid == '') {
+                        console.log('getresp message invalid cid');
+                        return;
+                    }
+
+                    console.log('should get file from ipfs. savepath:' + savepath);
+                    ipfs.get(msg.cid, savepath);
+                    break;
+            }
         }
     });
 });
@@ -75,14 +60,28 @@ function doDisConnect() {
     }
 }
 
+function doLogin() {
+    let msg = {}
+    msg.name = 'login';
+    msg.clientid = 'client1';
+
+    sendMsg(msg);
+}
+
 function sendMsg(msg) {
     msg.msgid = msgId;
     msgId++;
     conn.sendUTF(JSON.stringify(msg));
 }
 
+function setSavePath(path) {
+    savepath = path;
+}
 
-module.exports.doConnect = doConnect;
-module.exports.doDisConnect = doDisConnect;
-module.exports.sendMsg = sendMsg;
+module.exports = {
+    doConnect,
+    doDisConnect,
+    sendMsg,
+    setSavePath,
+}
 
