@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "crypto-random-string": "^3.2.0",
     "ipfs-http-client": "^44.3.0",
     "websocket": "^1.0.31"
   }

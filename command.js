@@ -1,6 +1,8 @@
 var ipfs = require('./ipfsConnection');
 var sProrocol = require('./serverProtocol');
 var wsConn = require('./wsConnect');
+const fs = require('fs');
+const cryptoRandomString = require('crypto-random-string');
 
 // function isRightParamCount(params) {
 //     switch (cmd) {
@@ -16,6 +18,9 @@ var wsConn = require('./wsConnect');
 
 function printCmdHelp(cmd) {
     switch (cmd) {
+        case 'create':
+            console.log('usage: create [filepath]');
+            break;
         case 'add':
             console.log('usage: add [filepath]');
             break;
@@ -43,20 +48,37 @@ async function doGet(sectorid, filepath) {
     let ret = sProrocol.get(sectorid);
 }
 
+async function doCreate(path) {
+    let size = 1016;
+    let fd = fs.openSync(path, 'w');
+    let randStr = cryptoRandomString({length: size});
+    fs.writeSync(fd, randStr);
+    fs.closeSync(fd);
+    console.log('create random file successful');
+    console.log('filepath:' + path + ', size:' + size);
+}
+
 function onInput(params) {
     switch (params[0]) {
+        case 'create':
+            if (params.length != 2) {
+                printCmdHelp(params[0]);
+            } else {
+                let err = doCreate(params[1]);
+            }
+            break;
         case 'add':
             if (params.length != 2) {
                 printCmdHelp(params[0]);
             } else {
-                err = doAdd(params[1]);
+                let err = doAdd(params[1]);
             }
             break;
         case 'get':
             if (params.length != 3) {
                 printCmdHelp(params[0]);
             } else {
-                err =doGet(params[1], params[2]);
+                let err =doGet(params[1], params[2]);
             }
             break;
         default:
