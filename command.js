@@ -27,9 +27,21 @@ function printCmdHelp(cmd) {
         case 'get':
             console.log('usage: get [cid] [localpath]');
             break;
-        }
+        case 'challenge':
+            console.log('usage: challenge sectorid');
+            break;
+            }
 }
 
+async function doCreate(path) {
+    let size = 1016;
+    let fd = fs.openSync(path, 'w');
+    let randStr = cryptoRandomString({length: size});
+    fs.writeSync(fd, randStr);
+    fs.closeSync(fd);
+    console.log('create random file successful');
+    console.log('filepath:' + path + ', size:' + size);
+}
 
 async function doAdd(filepath) {
     let fileinfo = await ipfs.add(filepath);
@@ -45,17 +57,11 @@ async function doAdd(filepath) {
 async function doGet(sectorid, filepath) {
     wsConn.setSavePath(filepath);
     console.log('ipfs get ' + sectorid + ', ' + filepath);
-    let ret = sProrocol.get(sectorid);
+    return sProrocol.get(sectorid);
 }
 
-async function doCreate(path) {
-    let size = 1016;
-    let fd = fs.openSync(path, 'w');
-    let randStr = cryptoRandomString({length: size});
-    fs.writeSync(fd, randStr);
-    fs.closeSync(fd);
-    console.log('create random file successful');
-    console.log('filepath:' + path + ', size:' + size);
+async function doChallenge(sectorid) {
+    return sProrocol.challenge(sectorid);
 }
 
 function onInput(params) {
@@ -78,7 +84,14 @@ function onInput(params) {
             if (params.length != 3) {
                 printCmdHelp(params[0]);
             } else {
-                let err =doGet(params[1], params[2]);
+                let err = doGet(params[1], params[2]);
+            }
+            break;
+        case 'challenge':
+            if (params.length != 2) {
+                printCmdHelp(params[0]);
+            } else {
+                let err = doChallenge(params[1]);
             }
             break;
         default:

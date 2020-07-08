@@ -19,6 +19,17 @@ function get(sectorid) {
     return ws.sendMsg(msg);
 }
 
+function challenge(sectorid) {
+    var msg = {};
+    msg.name = 'challenge';
+    msg.nodename = 'node-lzh';
+    msg.sectorid = sectorid;
+    return ws.sendMsg(msg);
+}
 
-module.exports.add = add;
-module.exports.get = get;
+
+module.exports = {
+    add,
+    get,
+    challenge,
+}
