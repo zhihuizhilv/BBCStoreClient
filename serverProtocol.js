@@ -4,7 +4,7 @@ var ws = require('./wsConnect');
 function add(cid, size) {
     var msg = {};
     msg.name = 'add';
-    msg.storeSvr = 'node1';
+    msg.nodename = 'node-lzh';
     msg.cid = cid;
     msg.size = size;
 
@@ -14,9 +14,8 @@ function add(cid, size) {
 function get(sectorid) {
     var msg = {};
     msg.name = 'get';
-    msg.storeSvr = 'node1';
+    msg.nodename = 'node-lzh';
     msg.sectorid = sectorid;
-
     return ws.sendMsg(msg);
 }
 

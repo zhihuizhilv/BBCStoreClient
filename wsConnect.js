@@ -79,7 +79,7 @@ function doDisConnect() {
 function doLogin() {
     let msg = {}
     msg.name = 'login';
-    msg.clientid = 'client1';
+    msg.username = 'user1';
 
     sendMsg(msg);
 }
