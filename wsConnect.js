@@ -1,3 +1,4 @@
+var config = require('./config');
 var ipfs = require('./ipfsConnection');
 var WebSocketClient = require('websocket').client;
 var client = new WebSocketClient();
@@ -28,8 +29,8 @@ client.on('connect', function(connection) {
 
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
-            console.log('Received: ');
-            console.log(message.utf8Data);
+            // console.log('Received: ');
+            // console.log(message.utf8Data);
 
             var msg = JSON.parse(message.utf8Data);
             switch (msg.name) {
@@ -72,8 +73,7 @@ client.on('connect', function(connection) {
 });
 
 function doConnect() {
-    // client.connect('ws://localhost:8080/', 'bbcstore-protocol', 'https://mysite.com');
-    client.connect('ws://localhost:18080/', '', 'https://mysite.com');
+    client.connect(config['serverip'], '', 'https://mysite.com');
 }
 
 function doDisConnect() {
