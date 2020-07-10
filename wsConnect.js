@@ -73,7 +73,7 @@ client.on('connect', function(connection) {
 });
 
 function doConnect() {
-    client.connect(config['serverip'], '', 'https://mysite.com');
+    client.connect(config['server'], '', 'https://mysite.com');
 }
 
 function doDisConnect() {

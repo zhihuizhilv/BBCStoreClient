@@ -3,6 +3,7 @@ const fs = require('fs');
 const BufferList = require('bl/BufferList')
 const IpfsHttpClient = require('ipfs-http-client');
 const { globSource } = IpfsHttpClient;
+var config = require('./config');
 
 
 function init() {
@@ -13,7 +14,9 @@ async function add(filepath) {
         throw TypeError('invalid file path');
     }
 
-    const ipfs = IpfsHttpClient();
+    const ipfs = IpfsHttpClient({
+        url: config["ipfsnode"],
+    });
 
     let files = [];
     for await (const file of ipfs.add(globSource(filepath, { recursive: true }))) {
