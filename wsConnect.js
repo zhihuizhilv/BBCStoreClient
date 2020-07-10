@@ -86,7 +86,7 @@ function doDisConnect() {
 function doLogin() {
     let msg = {}
     msg.name = 'login';
-    msg.username = 'user1';
+    msg.username = config['clientname'];
 
     sendMsg(msg);
 }

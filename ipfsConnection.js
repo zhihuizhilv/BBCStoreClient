@@ -15,7 +15,7 @@ async function add(filepath) {
     }
 
     const ipfs = IpfsHttpClient({
-        url: config["ipfsnode"],
+        url: config['ipfsnode'],
     });
 
     let files = [];
