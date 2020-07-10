@@ -47,11 +47,9 @@ async function get(cid, filepath) {
 
    let fd = fs.openSync(filepath, 'w');
 
-    console.log(1)
     const ipfs = IpfsHttpClient({
         url: config['ipfsnode'],
     });
-    console.log(1)
     // let file = await ipfs.get(cid)
 
     for await (const file of ipfs.get(cid)) {
@@ -70,7 +68,6 @@ async function get(cid, filepath) {
 
     
     fs.closeSync(fd);
-    console.log(1)
 }
 
 module.exports.init = init;
