@@ -28,7 +28,7 @@ function printCmdHelp(cmd) {
             console.log('usage: get [sectorid] [localpath]');
             break;
         case 'challenge':
-            console.log('usage: challenge sectorid');
+            console.log('usage: challenge [sectorid]');
             break;
             }
 }
