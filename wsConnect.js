@@ -34,7 +34,7 @@ client.on('connect', function(connection) {
             var msg = JSON.parse(message.utf8Data);
             switch (msg.name) {
                 case 'addresp':
-                    if (msg.code == 0) {
+                    if (msg.retcode == 0) {
                         let sectorid = msg.sectorid;
                         if (sectorid === undefined || sectorid == null || sectorid == 0) {
                             console.log('getresp message invalid sectorid');
@@ -56,7 +56,14 @@ client.on('connect', function(connection) {
                     console.log('should get file from ipfs. savepath:' + savepath);
                     ipfs.get(msg.cid, savepath);
                     break;
-                case 'wait':
+                case 'challengeresp':
+                    if (msg.retcode == 0) {
+                        console.log('challenge post successful');
+                    } else {
+                        console.log('challenge post failed. error:', msg.descrip);
+                    }
+                    break;
+                    case 'wait':
                     console.log(msg.descrip);
                     break;
             }

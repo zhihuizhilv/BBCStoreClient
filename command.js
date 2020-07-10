@@ -25,7 +25,7 @@ function printCmdHelp(cmd) {
             console.log('usage: add [filepath]');
             break;
         case 'get':
-            console.log('usage: get [cid] [localpath]');
+            console.log('usage: get [sectorid] [localpath]');
             break;
         case 'challenge':
             console.log('usage: challenge sectorid');
